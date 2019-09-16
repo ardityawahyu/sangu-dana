@@ -38,6 +38,8 @@ func (gateway *CoreGateway) Call(method, path string, header map[string]string, 
 }
 
 func (gateway *CoreGateway) Order(reqBody *OrderRequestData) (res ResponseBody, err error) {
+	reqBody.Order.OrderAmount.Value = fmt.Sprintf("%v00", reqBody.Order.OrderAmount.Value)
+
 	res, err = gateway.requestToDana(reqBody)
 	if err != nil {
 		return
