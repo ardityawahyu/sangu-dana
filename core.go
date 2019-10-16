@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/tidwall/gjson"
 	"io"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/tidwall/gjson"
 
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
@@ -16,15 +17,17 @@ import (
 
 const (
 	//ORDER_PATH       = "https://api-sandbox.saas.dana.id/alipayplus/acquiring/order/createOrder.htm"
-	ORDER_PATH       = "alipayplus/acquiring/order/createOrder.htm"
-	QUERY_PATH       = "alipayplus/acquiring/order/query.htm"
-	REFUND_PATH      = "alipayplus/acquiring/refund/refund.htm"
-	DANA_TIME_LAYOUT = "2006-01-02T15:04:05.000-07:00"
-	CURRENCY_IDR     = "IDR"
+	ORDER_PATH              = "alipayplus/acquiring/order/createOrder.htm"
+	QUERY_PATH              = "alipayplus/acquiring/order/query.htm"
+	REFUND_PATH             = "alipayplus/acquiring/refund/refund.htm"
+	APPLY_ACCESS_TOKEN_PATH = "dana/oauth/auth/applyToken.htm"
+	DANA_TIME_LAYOUT        = "2006-01-02T15:04:05.000-07:00"
+	CURRENCY_IDR            = "IDR"
 
-	FUNCTION_CREATE_ORDER = "dana.acquiring.order.createOrder"
-	FUNCTION_QUERY_ORDER  = "dana.acquiring.order.query"
-	FUNCTION_REFUND       = "dana.acquiring.refund.refund"
+	FUNCTION_CREATE_ORDER       = "dana.acquiring.order.createOrder"
+	FUNCTION_QUERY_ORDER        = "dana.acquiring.order.query"
+	FUNCTION_REFUND             = "dana.acquiring.refund.refund"
+	FUNCTION_APPLY_ACCESS_TOKEN = "dana.oauth.auth.applyToken"
 )
 
 // CoreGateway struct
@@ -75,6 +78,23 @@ func (gateway *CoreGateway) OrderDetail(reqBody *OrderDetailRequestData) (res Re
 	}
 
 	res.Response.Body = orderDetailData
+
+	return
+}
+
+func (gateway *CoreGateway) ApplyAccessToken(reqBody *RequestApplyAccessToken) (res ResponseBody, err error) {
+	res, err = gateway.requestToDana(reqBody, FUNCTION_APPLY_ACCESS_TOKEN, APPLY_ACCESS_TOKEN_PATH)
+	if err != nil {
+		return
+	}
+
+	var applyAccessToken ApplyAccessToken
+	err = mapstructure.Decode(res.Response.Body, &applyAccessToken)
+	if err != nil {
+		return
+	}
+
+	res.Response.Body = applyAccessToken
 
 	return
 }

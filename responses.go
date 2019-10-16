@@ -115,3 +115,21 @@ type PayOptionInfo struct {
 	ExtendInfo              string        `json:"extendInfo" valid:"optional"`
 	PayOptionBillExtendInfo string        `json:"payOptionBillExtendInfo" valid:"optional"`
 }
+
+type AccessTokenInfo struct {
+	AccessToken  string `json:"accessToken"`
+	ExpiresIn    string `json:"expiresIn"`
+	RefreshToken string `json:"refreshToken"`
+	ReExpiresIn  string `json:"reExpiresIn"`
+	TokenStatus  string `json:"tokenStatus"`
+}
+
+type UserInfo struct {
+	PublicUserID string `json:"publicUserId"`
+}
+
+type ApplyAccessToken struct {
+	ResultInfo      ResultInfo      `json:"resultInfo"`
+	AccessTokenInfo AccessTokenInfo `json:"accessTokenInfo"`
+	UserInfo        UserInfo        `json:"userInfo"`
+}

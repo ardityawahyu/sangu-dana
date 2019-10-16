@@ -160,3 +160,9 @@ type RequestBodyPayFinish struct {
 	AcquirementStatus string `json:"acquirementStatus"`
 	ExtendInfo        string `json:"extendInfo"`
 }
+
+type RequestApplyAccessToken struct {
+	GrantType    string `json:"grantType"`
+	AuthCode     string `json:"authCode"`
+	RefreshToken string `json:"refreshToken"`
+}
