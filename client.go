@@ -2,13 +2,14 @@ package dana
 
 import (
 	"encoding/json"
-	"github.com/tidwall/gjson"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/tidwall/gjson"
 )
 
 // Client struct
@@ -17,6 +18,7 @@ type Client struct {
 	Version      string
 	ClientId     string
 	ClientSecret string
+	AccessToken  string
 	PrivateKey   []byte
 	PublicKey    []byte
 	LogLevel     int

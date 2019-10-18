@@ -46,10 +46,10 @@ func (gateway *CoreGateway) Call(method, path string, header map[string]string, 
 	return gateway.Client.Call(method, path, header, body, v)
 }
 
-func (gateway *CoreGateway) Order(reqBody *OrderRequestData) (res ResponseBody, err error) {
+func (gateway *CoreGateway) Order(reqBody *OrderRequestData, accessToken string) (res ResponseBody, err error) {
 	reqBody.Order.OrderAmount.Value = fmt.Sprintf("%v00", reqBody.Order.OrderAmount.Value)
 
-	res, err = gateway.requestToDana(reqBody, FUNCTION_CREATE_ORDER, ORDER_PATH)
+	res, err = gateway.requestToDana(reqBody, accessToken, FUNCTION_CREATE_ORDER, ORDER_PATH)
 	if err != nil {
 		return
 	}
@@ -65,8 +65,8 @@ func (gateway *CoreGateway) Order(reqBody *OrderRequestData) (res ResponseBody, 
 	return
 }
 
-func (gateway *CoreGateway) OrderDetail(reqBody *OrderDetailRequestData) (res ResponseBody, err error) {
-	res, err = gateway.requestToDana(reqBody, FUNCTION_QUERY_ORDER, QUERY_PATH)
+func (gateway *CoreGateway) OrderDetail(reqBody *OrderDetailRequestData, accessToken string) (res ResponseBody, err error) {
+	res, err = gateway.requestToDana(reqBody, accessToken, FUNCTION_QUERY_ORDER, QUERY_PATH)
 	if err != nil {
 		return
 	}
@@ -83,7 +83,7 @@ func (gateway *CoreGateway) OrderDetail(reqBody *OrderDetailRequestData) (res Re
 }
 
 func (gateway *CoreGateway) ApplyAccessToken(reqBody *RequestApplyAccessToken) (res ResponseBody, err error) {
-	res, err = gateway.requestToDana(reqBody, FUNCTION_APPLY_ACCESS_TOKEN, APPLY_ACCESS_TOKEN_PATH)
+	res, err = gateway.requestToDana(reqBody, "", FUNCTION_APPLY_ACCESS_TOKEN, APPLY_ACCESS_TOKEN_PATH)
 	if err != nil {
 		return
 	}
@@ -99,10 +99,10 @@ func (gateway *CoreGateway) ApplyAccessToken(reqBody *RequestApplyAccessToken) (
 	return
 }
 
-func (gateway *CoreGateway) Refund(reqBody *RefundRequestData) (res ResponseBody, err error) {
+func (gateway *CoreGateway) Refund(reqBody *RefundRequestData, accessToken string) (res ResponseBody, err error) {
 	reqBody.RefundAmount.Value = fmt.Sprintf("%v00", reqBody.RefundAmount.Value)
 
-	res, err = gateway.requestToDana(reqBody, FUNCTION_REFUND, REFUND_PATH)
+	res, err = gateway.requestToDana(reqBody, accessToken, FUNCTION_REFUND, REFUND_PATH)
 	if err != nil {
 		return
 	}
@@ -137,7 +137,7 @@ func (gateway *CoreGateway) VerifySignature(res []byte, signature string) (err e
 	return
 }
 
-func (gateway *CoreGateway) requestToDana(reqBody interface{}, headerFunction string, path string) (res ResponseBody, err error) {
+func (gateway *CoreGateway) requestToDana(reqBody interface{}, accessToken string, headerFunction string, path string) (res ResponseBody, err error) {
 	now := time.Now()
 
 	head := RequestHeader{}
@@ -146,6 +146,10 @@ func (gateway *CoreGateway) requestToDana(reqBody interface{}, headerFunction st
 	head.ClientID = gateway.Client.ClientId
 	head.ReqTime = now.Format(DANA_TIME_LAYOUT)
 	head.ClientSecret = gateway.Client.ClientSecret
+
+	if accessToken != "" {
+		head.AccessToken = accessToken
+	}
 
 	var id uuid.UUID
 	id, err = uuid.NewUUID()
