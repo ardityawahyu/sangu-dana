@@ -133,3 +133,13 @@ type ApplyAccessToken struct {
 	AccessTokenInfo AccessTokenInfo `json:"accessTokenInfo"`
 	UserInfo        UserInfo        `json:"userInfo"`
 }
+
+type UserResourceInfos struct {
+	ResourceType string      `json:"resourceType"`
+	Value        interface{} `json:"value"`
+}
+
+type UserProfileResponseData struct {
+	ResultInfo        ResultInfo          `json:"resultInfo" valid:"required"`
+	UserResourceInfos []UserResourceInfos `json:"userResourceInfos" valid:"required"`
+}

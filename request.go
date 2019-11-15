@@ -166,3 +166,7 @@ type RequestApplyAccessToken struct {
 	AuthCode     string `json:"authCode"`
 	RefreshToken string `json:"refreshToken"`
 }
+
+type UserProfileRequestData struct {
+	UserResources []string `json:"userResources" valid:"required"`
+}
