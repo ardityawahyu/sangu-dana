@@ -21,6 +21,7 @@ const (
 	QUERY_PATH              = "alipayplus/acquiring/order/query.htm"
 	REFUND_PATH             = "alipayplus/acquiring/refund/refund.htm"
 	APPLY_ACCESS_TOKEN_PATH = "dana/oauth/auth/applyToken.htm"
+	USER_PROFILE_PATH       = "alipayplus/member/query/queryUserProfile.htm"
 	DANA_TIME_LAYOUT        = "2006-01-02T15:04:05.000-07:00"
 	CURRENCY_IDR            = "IDR"
 
@@ -28,6 +29,7 @@ const (
 	FUNCTION_QUERY_ORDER        = "dana.acquiring.order.query"
 	FUNCTION_REFUND             = "dana.acquiring.refund.refund"
 	FUNCTION_APPLY_ACCESS_TOKEN = "dana.oauth.auth.applyToken"
+	FUNCTION_USER_PROFILE       = "dana.member.query.queryUserProfile"
 )
 
 // CoreGateway struct
@@ -134,6 +136,23 @@ func (gateway *CoreGateway) VerifySignature(res []byte, signature string) (err e
 	if err != nil {
 		err = fmt.Errorf("could not verify request: %v", err)
 	}
+	return
+}
+
+func (gateway *CoreGateway) UserProfile(reqBody *UserProfileRequestData, accessToken string) (res ResponseBody, err error) {
+	res, err = gateway.requestToDana(reqBody, accessToken, FUNCTION_USER_PROFILE, USER_PROFILE_PATH)
+	if err != nil {
+		return
+	}
+
+	var userProfileResponseData UserProfileResponseData
+	err = mapstructure.Decode(res.Response.Body, &userProfileResponseData)
+	if err != nil {
+		return
+	}
+
+	res.Response.Body = userProfileResponseData
+
 	return
 }
 

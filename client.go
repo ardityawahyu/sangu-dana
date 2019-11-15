@@ -2,27 +2,26 @@ package dana
 
 import (
 	"encoding/json"
+	"github.com/tidwall/gjson"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
-
-	"github.com/tidwall/gjson"
 )
 
 // Client struct
 type Client struct {
-	BaseUrl      string
-	Version      string
-	ClientId     string
-	ClientSecret string
-	AccessToken  string
-	PrivateKey   []byte
-	PublicKey    []byte
-	LogLevel     int
-	Logger       *log.Logger
+	BaseUrl          string
+	Version          string
+	ClientId         string
+	ClientSecret     string
+	PrivateKey       []byte
+	PublicKey        []byte
+	LogLevel         int
+	Logger           *log.Logger
+	SignatureEnabled bool
 }
 
 // NewClient : this function will always be called when the library is in use
@@ -35,6 +34,7 @@ func NewClient() Client {
 		// 3: Errors + informational + debug
 		LogLevel: 2,
 		Logger:   log.New(os.Stderr, "", log.LstdFlags),
+		SignatureEnabled: true,
 	}
 }
 
@@ -111,12 +111,14 @@ func (c *Client) ExecuteRequest(req *http.Request, v interface{}) error {
 			return err
 		}
 
-		response := gjson.Get(string(resBody), "response")
-		signature := gjson.Get(string(resBody), "signature")
+		if c.SignatureEnabled {
+			response := gjson.Get(string(resBody), "response")
+			signature := gjson.Get(string(resBody), "signature")
 
-		err := verifySignature(response.String(), signature.String(), c.PublicKey)
-		if err != nil {
-			return err
+			err := verifySignature(response.String(), signature.String(), c.PublicKey)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -136,3 +138,4 @@ func (c *Client) Call(method, path string, header map[string]string, body io.Rea
 }
 
 // ===================== END HTTP CLIENT ================================================
+
