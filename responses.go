@@ -108,12 +108,12 @@ type PaymentView struct {
 }
 
 type PayOptionInfo struct {
-	PayMethod               PayMethodEnum `json:"payMethod" valid:"required"`
-	PayAmount               Amount        `json:"payAmount" valid:"required"`
-	TransAmount             Amount        `json:"transAmount" valid:"optional"`
-	ChargeAmount            Amount        `json:"chargeAmount" valid:"optional"`
-	ExtendInfo              string        `json:"extendInfo" valid:"optional"`
-	PayOptionBillExtendInfo string        `json:"payOptionBillExtendInfo" valid:"optional"`
+	PayMethod               string `json:"payMethod" valid:"required"`
+	PayAmount               Amount `json:"payAmount" valid:"required"`
+	TransAmount             Amount `json:"transAmount" valid:"optional"`
+	ChargeAmount            Amount `json:"chargeAmount" valid:"optional"`
+	ExtendInfo              string `json:"extendInfo" valid:"optional"`
+	PayOptionBillExtendInfo string `json:"payOptionBillExtendInfo" valid:"optional"`
 }
 
 type AccessTokenInfo struct {
