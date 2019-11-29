@@ -52,6 +52,7 @@ type ResultInfo struct {
 	ResultStatus string `json:"resultStatus" valid:"optional"`
 	ResultCodeID string `json:"resultCodeId" valid:"optional"`
 	ResultMsg    string `json:"resultMsg" valid:"optional"`
+	ResultCode   string `json:"resultCode" valid:"optional"`
 }
 
 type PayFinishResponse struct {

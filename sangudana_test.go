@@ -35,7 +35,7 @@ func (dana *DanaSanguTestSuite) TestApplyTokenSuccess() {
 
 	reqBody := &RequestApplyAccessToken{
 		GrantType:    "AUTHORIZATION_CODE",
-		AuthCode:     "MpttSeDYJ8tLRJD5MdhQ9Hr7v2DZ8Uhs538f7300",
+		AuthCode:     "2P8pZedLvCW70sBKc7kWP5SZxlULgWDoeGCO7300",
 		RefreshToken: "",
 	}
 
