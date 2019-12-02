@@ -22,7 +22,7 @@ const (
 	REFUND_PATH             = "alipayplus/acquiring/refund/refund.htm"
 	APPLY_ACCESS_TOKEN_PATH = "dana/oauth/auth/applyToken.htm"
 	USER_PROFILE_PATH       = "alipayplus/member/query/queryUserProfile.htm"
-	DANA_TIME_LAYOUT        = "2006-01-02T15:04:05.000-07:00"
+	DANA_TIME_LAYOUT        = "2006-01-02T15:04:05-07:00"
 	CURRENCY_IDR            = "IDR"
 
 	FUNCTION_CREATE_ORDER       = "dana.acquiring.order.createOrder"
